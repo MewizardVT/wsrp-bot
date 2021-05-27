@@ -3,6 +3,8 @@ const config = require("./info.json")
 const bot = new Discord.Client()
 const fivem = require("fivereborn-query")
 const fs = require("fs")
+const reborn = require("fivem")
+const server = new reborn.Server('80.208.231.231:30120')
 bot.on("ready", async () => {
     console.log("a")
    
@@ -37,67 +39,25 @@ bot.on("message", async message => {
     })
  }
 
- if(cmd === `${prefix}embed`){
+ if(cmd === `${prefix}status`){
     let desc = fs.readFileSync("desc.txt", 'utf8')
-     let embed = new Discord.MessageEmbed()
-     fivem.query(config.server_ip,config.server_port, (err, data) => {
-         embed.setTitle("WSRP Server Status")
-         embed.setDescription(desc)
-        embed.addField("Current Member Count", `There are currently ${data.clients} people on the Public server at this time.`)
-        embed.addField("Current AOP [Area of Patrol]", data.mapname)
-        embed.setFooter("Server IP: 80.208.231.231:30120")
-        message.channel.send(embed)
-     })
- }
-
- if(cmd === `${prefix}test`){
     let embed = new Discord.MessageEmbed()
     fivem.query(config.server_ip,config.server_port, (err, data) => {
         embed.setTitle("WSRP Server Status")
-       embed.addField("Current Member Count", data.clients)
-       embed.addField("Area of Patrol", "Coming Soon")
-       embed.setFooter("Server IP: 80.208.231.231:30120; Updated every 10 seconds.")
-       var offTopic = bot.channels.cache.get('844718778179911691'); //.get('448392061415325697');
-      message.channel.send(embed)
-    })
-   
- }
-
- function thingy() {
-    var offTopic = bot.channels.cache.get('844718778179911691'); 
-    let embed = new Discord.MessageEmbed()
-    fivem.query(config.server_ip,config.server_port, (err, data) => {
-        embed.setTitle("WSRP Server Status")
-       embed.addField("Current Member Count", data.clients)
-       embed.addField("Area of Patrol", "Coming Soon")
-       embed.setFooter("Server IP: 80.208.231.231:30120; Updated every 10 seconds.")
-    })
-    
- }
-
- if(cmd === `${prefix}intervaltest`){
-   let desc = fs.readFileSync("desc.txt", 'utf8')
-    fivem.query(config.server_ip,config.server_port, (err, data) => {
-        let embed = new Discord.MessageEmbed()
-        embed.setTitle("WSRP | Live Status")
         embed.setDescription(desc)
-       embed.addField("Current Member Count", data.clients)
-       embed.addField("Area of Patrol", data.mapname)
-       embed.setFooter("Server IP: 80.208.231.231:30120; Updated every 10 seconds.")
-       var offTopic = bot.channels.cache.get('844706405302009866'); //.get('448392061415325697');
-
-       var interval = setInterval (function() {
-           
-        offTopic.send(embed)
-        .then(message => {
-            message.delete({ timeout: 10000 })
-        })
-       }, 1 * 10000);
-      
+       embed.addField("Current Member Count", `There are currently ${data.clients} people on the main server at this time.`)
+       embed.addField("Current AOP [Area of Patrol]", data.mapname)
+       embed.setFooter("Copyright WSRP 2021 | All Rights Reserved; Programmed by Mewizard#0022")
+       message.channel.send(embed)
     })
+ }
+
+ if(cmd === `${prefix}test1`){
+     let count = server.getPlayersAll().then(data => console.log(data))
+     message.channel.send(count)
  }
  
-}) // eof
+}) // end of file do not go past this
 
 
 
